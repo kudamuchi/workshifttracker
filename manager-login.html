@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sign In — ShiftTracker</title>
+<title>Manager Login — ShiftTracker</title>
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -11,14 +11,14 @@
 <header class="topbar">
   <a class="brand" href="index.html" style="text-decoration:none;">ShiftTracker</a>
   <div class="topbar-links">
-    <a class="btn btn-muted" href="register.html">Register</a>
+    <a class="btn btn-muted" href="login.html">Employee Login</a>
   </div>
 </header>
 
 <div class="auth-wrap">
   <div class="auth-card">
-    <h1>Welcome back</h1>
-    <p class="subtitle">Sign in to continue tracking your shifts.</p>
+    <h1>Manager Login</h1>
+    <p class="subtitle">Sign in to view your team's shifts and status.</p>
 
     <div id="formMsg" class="form-msg"></div>
 
@@ -31,12 +31,12 @@
         <label for="password">Password</label>
         <input type="password" id="password" required autocomplete="current-password" placeholder="••••••••">
       </div>
-      <button type="submit" class="btn btn-primary btn-block" id="submitBtn">Sign In</button>
+      <button type="submit" class="btn btn-primary btn-block" id="submitBtn">Sign In as Manager</button>
     </form>
 
     <div class="auth-foot">
-      Don't have an account? <a href="register.html">Register</a><br>
-      Are you a manager? <a href="manager-login.html">Manager login</a>
+      Not a manager? <a href="login.html">Employee login</a><br>
+      Don't have an account? <a href="register.html">Register</a>
     </div>
   </div>
 </div>
@@ -66,13 +66,24 @@
       msg.textContent = error.message;
       msg.className = "form-msg error";
       submitBtn.disabled = false;
-      submitBtn.textContent = "Sign In";
+      submitBtn.textContent = "Sign In as Manager";
       return;
     }
 
     const { data: { session } } = await supabaseClient.auth.getSession();
     const profile = await getProfile(session.user.id);
-    window.location.href = homeForRole(profile?.role || "employee");
+
+    if (!profile || profile.role !== "manager") {
+      // This account isn't a manager — don't leave them signed in on the wrong page.
+      await supabaseClient.auth.signOut();
+      msg.textContent = "This account isn't registered as a manager. Use Employee Login instead.";
+      msg.className = "form-msg error";
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Sign In as Manager";
+      return;
+    }
+
+    window.location.href = "manager-dashboard.html";
   });
 </script>
 </body>
