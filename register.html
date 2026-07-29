@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register — ShiftTracker</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <a class="brand" href="index.html" style="text-decoration:none;">ShiftTracker</a>
+  <div class="topbar-links">
+    <a class="btn btn-muted" href="login.html">Login</a>
+  </div>
+</header>
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <h1>Create your account</h1>
+    <p class="subtitle">Start tracking your work hours in minutes.</p>
+
+    <div id="formMsg" class="form-msg"></div>
+
+    <form id="registerForm">
+      <div class="field">
+        <label>I am a</label>
+        <div class="role-toggle" id="roleToggle">
+          <button type="button" class="role-option selected" data-role="employee">Employee</button>
+          <button type="button" class="role-option" data-role="manager">Manager</button>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="firstName">First name</label>
+          <input type="text" id="firstName" required autocomplete="given-name" placeholder="Jane">
+        </div>
+        <div class="field">
+          <label for="lastName">Last name</label>
+          <input type="text" id="lastName" required autocomplete="family-name" placeholder="Doe">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" required autocomplete="email" placeholder="you@example.com">
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" required minlength="6" autocomplete="new-password" placeholder="At least 6 characters">
+      </div>
+      <div class="field">
+        <label for="confirmPassword">Confirm password</label>
+        <input type="password" id="confirmPassword" required minlength="6" autocomplete="new-password" placeholder="Repeat your password">
+      </div>
+      <button type="submit" class="btn btn-primary btn-block" id="submitBtn">Create Account</button>
+    </form>
+
+    <div class="auth-foot">
+      Already have an account? <a href="login.html">Sign in</a>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  redirectIfAuthed();
+
+  let selectedRole = "employee";
+  const roleToggle = document.getElementById("roleToggle");
+  roleToggle.addEventListener("click", (e) => {
+    const btn = e.target.closest(".role-option");
+    if (!btn) return;
+    selectedRole = btn.dataset.role;
+    roleToggle.querySelectorAll(".role-option").forEach((b) => b.classList.toggle("selected", b === btn));
+  });
+
+  const form = document.getElementById("registerForm");
+  const msg = document.getElementById("formMsg");
+  const submitBtn = document.getElementById("submitBtn");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    msg.className = "form-msg";
+
+    const firstName = document.getElementById("firstName").value.trim();
+    const lastName = document.getElementById("lastName").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+
+    if (password !== confirmPassword) {
+      msg.textContent = "Passwords do not match.";
+      msg.className = "form-msg error";
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Creating account...";
+
+    const { data, error } = await supabaseClient.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          first_name: firstName,
+          last_name: lastName,
+          role: selectedRole,
+        }
+      }
+    });
+
+    if (error) {
+      msg.textContent = error.message;
+      msg.className = "form-msg error";
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Create Account";
+      return;
+    }
+
+    // If email confirmation is required, there will be no session yet.
+    if (!data.session) {
+      msg.textContent = "Account created! Check your email to confirm, then sign in.";
+      msg.className = "form-msg success";
+      submitBtn.textContent = "Check your email";
+      setTimeout(() => { window.location.href = "login.html"; }, 2500);
+      return;
+    }
+
+    window.location.href = homeForRole(selectedRole);
+  });
+</script>
+</body>
+</html>
