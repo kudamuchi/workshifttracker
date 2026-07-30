@@ -4,6 +4,11 @@ A static (no build step) work-hours tracker: landing page, email/password auth, 
 employee dashboard with shift start/break/end, a live timer, geolocation, and hours stats.
 Backend is Supabase (Postgres + Auth). Hosting is Netlify.
 
+## Icons & responsive design
+
+- Every icon site-wide comes from [Font Awesome 6 Solid](https://fontawesome.com/search?o=r&s=solid) (loaded via cdnjs), replacing the earlier emoji glyphs with a consistent filled icon set — clock, mug, location pin, users, etc.
+- Layout uses fluid type (`clamp()`), a responsive grid that collapses from 4 → 2 → 1 columns, a stacking header on narrow screens, and a horizontally-scrollable roster table on the manager dashboard — so it works from a small phone up to a wide desktop without horizontal scrollbars or overlapping elements.
+
 ## Files
 
 ```

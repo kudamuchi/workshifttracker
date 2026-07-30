@@ -5,13 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sign In — ShiftTracker</title>
 <link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body>
 
 <header class="topbar">
-  <a class="brand" href="index.html" style="text-decoration:none;">ShiftTracker</a>
+  <a class="brand" href="index.html" style="text-decoration:none;"><i class="fa-solid fa-business-time"></i>ShiftTracker</a>
   <div class="topbar-links">
-    <a class="btn btn-muted" href="register.html">Register</a>
+    <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme"><i class="fa-solid fa-sun"></i></button>
+    <a class="btn btn-muted" href="register.html"><i class="fa-solid fa-user-plus"></i>Register</a>
   </div>
 </header>
 
@@ -25,13 +27,19 @@
     <form id="loginForm">
       <div class="field">
         <label for="email">Email</label>
-        <input type="email" id="email" required autocomplete="email" placeholder="you@example.com">
+        <div class="input-wrap">
+          <i class="fa-solid fa-envelope"></i>
+          <input type="email" id="email" required autocomplete="email" placeholder="you@example.com">
+        </div>
       </div>
       <div class="field">
         <label for="password">Password</label>
-        <input type="password" id="password" required autocomplete="current-password" placeholder="••••••••">
+        <div class="input-wrap">
+          <i class="fa-solid fa-lock"></i>
+          <input type="password" id="password" required autocomplete="current-password" placeholder="••••••••">
+        </div>
       </div>
-      <button type="submit" class="btn btn-primary btn-block" id="submitBtn">Sign In</button>
+      <button type="submit" class="btn btn-primary btn-block" id="submitBtn"><i class="fa-solid fa-right-to-bracket"></i>Sign In</button>
     </form>
 
     <div class="auth-foot">
@@ -44,6 +52,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabase-client.js"></script>
 <script src="js/auth.js"></script>
+<script src="js/theme.js"></script>
 <script>
   redirectIfAuthed();
 
@@ -55,7 +64,7 @@
     e.preventDefault();
     msg.className = "form-msg";
     submitBtn.disabled = true;
-    submitBtn.textContent = "Signing in...";
+    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>Signing in...';
 
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
@@ -63,10 +72,10 @@
     const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
 
     if (error) {
-      msg.textContent = error.message;
+      msg.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i><span>${error.message}</span>`;
       msg.className = "form-msg error";
       submitBtn.disabled = false;
-      submitBtn.textContent = "Sign In";
+      submitBtn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i>Sign In';
       return;
     }
 

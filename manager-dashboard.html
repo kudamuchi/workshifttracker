@@ -5,18 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Manager Dashboard — ShiftTracker</title>
 <link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body>
 
 <header class="topbar">
-  <a class="brand" href="manager-dashboard.html" style="text-decoration:none;">ShiftTracker</a>
+  <a class="brand" href="manager-dashboard.html" style="text-decoration:none;"><i class="fa-solid fa-business-time"></i>ShiftTracker</a>
   <div class="topbar-right">
-    <a class="btn btn-outline" href="dashboard.html">My Shifts</a>
-    <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme">&#9728;</button>
+    <a class="btn btn-outline" href="dashboard.html"><i class="fa-solid fa-user-clock"></i>My Shifts</a>
+    <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme"><i class="fa-solid fa-sun"></i></button>
     <div class="user-menu" id="userMenu" onclick="toggleUserDropdown()">
-      <span id="userLabel">Manager</span> &#9662;
+      <i class="fa-solid fa-circle-user"></i>
+      <span id="userLabel">Manager</span> <i class="fa-solid fa-chevron-down"></i>
       <div class="user-dropdown" id="userDropdown">
-        <button onclick="signOut()">Log out</button>
+        <button onclick="signOut()"><i class="fa-solid fa-right-from-bracket"></i>Log out</button>
       </div>
     </div>
   </div>
@@ -25,50 +27,64 @@
 <main class="dashboard">
   <div class="dashboard-head">
     <div>
-      <h1 style="margin-bottom:0;">Manager Dashboard</h1>
+      <h1><i class="fa-solid fa-users-gear"></i>Manager Dashboard</h1>
       <p>Live status and hours for everyone on your team.</p>
     </div>
-    <button class="btn btn-muted" id="refreshBtn">&#8635; Refresh</button>
+    <button class="btn btn-muted" id="refreshBtn"><i class="fa-solid fa-arrows-rotate"></i>Refresh</button>
   </div>
 
   <div class="summary-grid">
     <div class="summary-card total">
-      <div class="label">Total Employees</div>
-      <div class="value" id="sumTotal">0</div>
+      <div class="summary-icon"><i class="fa-solid fa-users"></i></div>
+      <div>
+        <div class="label">Total Employees</div>
+        <div class="value" id="sumTotal">0</div>
+      </div>
     </div>
     <div class="summary-card working">
-      <div class="label">Currently Working</div>
-      <div class="value" id="sumWorking">0</div>
+      <div class="summary-icon"><i class="fa-solid fa-circle-check"></i></div>
+      <div>
+        <div class="label">Currently Working</div>
+        <div class="value" id="sumWorking">0</div>
+      </div>
     </div>
     <div class="summary-card break">
-      <div class="label">On Break</div>
-      <div class="value" id="sumBreak">0</div>
+      <div class="summary-icon"><i class="fa-solid fa-mug-saucer"></i></div>
+      <div>
+        <div class="label">On Break</div>
+        <div class="value" id="sumBreak">0</div>
+      </div>
     </div>
     <div class="summary-card idle">
-      <div class="label">Not Working</div>
-      <div class="value" id="sumIdle">0</div>
+      <div class="summary-icon"><i class="fa-solid fa-circle-pause"></i></div>
+      <div>
+        <div class="label">Not Working</div>
+        <div class="value" id="sumIdle">0</div>
+      </div>
     </div>
   </div>
 
   <div class="roster-card">
     <div class="roster-card-head">
-      <h2>Employee Shift Status</h2>
+      <h2><i class="fa-solid fa-list-check"></i>Employee Shift Status</h2>
     </div>
-    <table class="roster-table">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Surname</th>
-          <th>Status</th>
-          <th>Started At</th>
-          <th>Today</th>
-          <th>Location</th>
-        </tr>
-      </thead>
-      <tbody id="rosterBody">
-        <tr><td colspan="6" class="roster-empty">Loading team…</td></tr>
-      </tbody>
-    </table>
+    <div class="roster-table-wrap">
+      <table class="roster-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Status</th>
+            <th>Started At</th>
+            <th>Today</th>
+            <th>Location</th>
+          </tr>
+        </thead>
+        <tbody id="rosterBody">
+          <tr><td colspan="6" class="roster-empty"><i class="fa-solid fa-spinner fa-spin"></i> Loading team…</td></tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </main>
 
