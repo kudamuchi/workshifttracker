@@ -117,3 +117,20 @@ No environment variables are required — the Supabase URL/key are already in
 - The roster refreshes every 20 seconds (and on the Refresh button) with each employee's
   name, surname, live status, shift start time, hours worked today, and a link to their
   last reported location on Google Maps.
+
+## Dispatch — send the nearest driver to a location
+
+- The **Dispatch** panel on the manager dashboard shows every employee's last reported
+  location as a pin on a map. Click the map, drag the red target pin, search an address,
+  or hit the crosshair button to use your own location — that sets the target.
+- Once a target is set, the **Nearest Drivers** list ranks every employee by straight-line
+  distance to that target (closest first) with their live status, and a **Send** button.
+  Employees with no reported location are listed but can't be sent to.
+- An optional note above the list is included with the dispatch (e.g. "Pickup at gate 2").
+- **Send** writes a row to `public.dispatches`. The target employee sees a blue alert
+  banner at the top of their own dashboard (polled every 20 seconds) with the note,
+  the target location/time, a **Directions** button (opens Google Maps turn-by-turn),
+  and a **Got it** button that acknowledges it and clears the banner.
+- This is a new table, so if you already ran `sql/schema.sql` once, just re-run the
+  whole file again in the Supabase SQL editor — every statement is safe to repeat and
+  it will add `public.dispatches` and its policies without touching existing data.

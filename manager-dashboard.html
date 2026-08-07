@@ -6,6 +6,7 @@
 <title>Manager Dashboard — ShiftTracker</title>
 <link rel="stylesheet" href="css/styles.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
 <body>
 
@@ -64,6 +65,39 @@
     </div>
   </div>
 
+  <div class="dispatch-card">
+    <div class="dispatch-card-head">
+      <h2><i class="fa-solid fa-route"></i>Dispatch</h2>
+      <p>Drop a pin (or search an address) to see which drivers are nearest, then send them there.</p>
+    </div>
+
+    <div class="dispatch-body">
+      <div class="dispatch-map-col">
+        <div class="target-search">
+          <input type="text" id="targetSearchInput" placeholder="Search an address or place…">
+          <button class="btn btn-muted" id="targetSearchBtn" type="button"><i class="fa-solid fa-magnifying-glass"></i></button>
+          <button class="btn btn-outline" id="targetMyLocationBtn" type="button" title="Use my current location"><i class="fa-solid fa-location-crosshairs"></i></button>
+        </div>
+        <div id="dispatchMap"></div>
+        <div class="dispatch-target-row" id="dispatchTargetRow">
+          <i class="fa-solid fa-map-pin"></i>
+          <span id="dispatchTargetLabel">Click the map to set a target location</span>
+        </div>
+        <textarea id="dispatchMessage" class="dispatch-message" rows="2" placeholder="Optional note to include (e.g. “Pickup at gate 2”)"></textarea>
+      </div>
+
+      <div class="dispatch-list-col">
+        <div class="dispatch-list-head">
+          <span>Nearest Drivers</span>
+          <span class="muted" id="dispatchListCount"></span>
+        </div>
+        <div class="nearest-list" id="nearestList">
+          <div class="roster-empty"><i class="fa-solid fa-map-pin"></i> Set a target location to rank drivers by distance.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="roster-card">
     <div class="roster-card-head">
       <h2><i class="fa-solid fa-list-check"></i>Employee Shift Status</h2>
@@ -89,6 +123,7 @@
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="js/supabase-client.js"></script>
 <script src="js/auth.js"></script>
 <script src="js/theme.js"></script>
