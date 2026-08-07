@@ -1,161 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Manager Dashboard — ShiftTracker</title>
-<link rel="stylesheet" href="css/styles.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manager Dashboard — ShiftTracker</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
+
 <body>
 
-<header class="topbar">
-  <a class="brand" href="manager-dashboard.html" style="text-decoration:none;"><i class="fa-solid fa-business-time"></i>ShiftTracker</a>
-  <div class="topbar-right">
-    <a class="btn btn-outline" href="dashboard.html"><i class="fa-solid fa-user-clock"></i>My Shifts</a>
-    <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme"><i class="fa-solid fa-sun"></i></button>
-    <div class="user-menu" id="userMenu" onclick="toggleUserDropdown()">
-      <i class="fa-solid fa-circle-user"></i>
-      <span id="userLabel">Manager</span> <i class="fa-solid fa-chevron-down"></i>
-      <div class="user-dropdown" id="userDropdown">
-        <button onclick="signOut()"><i class="fa-solid fa-right-from-bracket"></i>Log out</button>
+  <header class="topbar">
+    <a class="brand" href="manager-dashboard.html" style="text-decoration:none;"><i
+        class="fa-solid fa-business-time"></i>ShiftTracker</a>
+    <div class="topbar-right">
+      <a class="btn btn-outline" href="dashboard.html"><i class="fa-solid fa-user-clock"></i>My Shifts</a>
+      <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme"><i class="fa-solid fa-sun"></i></button>
+      <div class="user-menu" id="userMenu" onclick="toggleUserDropdown()">
+        <i class="fa-solid fa-circle-user"></i>
+        <span id="userLabel">Manager</span> <i class="fa-solid fa-chevron-down"></i>
+        <div class="user-dropdown" id="userDropdown">
+          <button onclick="signOut()"><i class="fa-solid fa-right-from-bracket"></i>Log out</button>
+        </div>
       </div>
     </div>
-  </div>
-</header>
+  </header>
 
-<main class="dashboard">
-  <div class="dashboard-head">
-    <div>
-      <h1><i class="fa-solid fa-users-gear"></i>Manager Dashboard</h1>
-      <p>Live status and hours for everyone on your team.</p>
+  <main class="dashboard">
+    <div class="dashboard-head">
+      <div>
+        <h1><i class="fa-solid fa-users-gear"></i>Manager Dashboard</h1>
+        <p>Live status and hours for everyone on your team.</p>
+      </div>
+      <button class="btn btn-muted" id="refreshBtn"><i class="fa-solid fa-arrows-rotate"></i>Refresh</button>
     </div>
-    <button class="btn btn-muted" id="refreshBtn"><i class="fa-solid fa-arrows-rotate"></i>Refresh</button>
-  </div>
 
-  <div class="summary-grid">
-    <div class="summary-card total">
-      <div class="summary-icon"><i class="fa-solid fa-users"></i></div>
-      <div>
-        <div class="label">Total Employees</div>
-        <div class="value" id="sumTotal">0</div>
+    <div class="summary-grid">
+      <div class="summary-card total">
+        <div class="summary-icon"><i class="fa-solid fa-users"></i></div>
+        <div>
+          <div class="label">Total Employees</div>
+          <div class="value" id="sumTotal">0</div>
+        </div>
+      </div>
+      <div class="summary-card working">
+        <div class="summary-icon"><i class="fa-solid fa-circle-check"></i></div>
+        <div>
+          <div class="label">Currently Working</div>
+          <div class="value" id="sumWorking">0</div>
+        </div>
+      </div>
+      <div class="summary-card break">
+        <div class="summary-icon"><i class="fa-solid fa-mug-saucer"></i></div>
+        <div>
+          <div class="label">On Break</div>
+          <div class="value" id="sumBreak">0</div>
+        </div>
+      </div>
+      <div class="summary-card idle">
+        <div class="summary-icon"><i class="fa-solid fa-circle-pause"></i></div>
+        <div>
+          <div class="label">Not Working</div>
+          <div class="value" id="sumIdle">0</div>
+        </div>
       </div>
     </div>
-    <div class="summary-card working">
-      <div class="summary-icon"><i class="fa-solid fa-circle-check"></i></div>
-      <div>
-        <div class="label">Currently Working</div>
-        <div class="value" id="sumWorking">0</div>
-      </div>
-    </div>
-    <div class="summary-card break">
-      <div class="summary-icon"><i class="fa-solid fa-mug-saucer"></i></div>
-      <div>
-        <div class="label">On Break</div>
-        <div class="value" id="sumBreak">0</div>
-      </div>
-    </div>
-    <div class="summary-card idle">
-      <div class="summary-icon"><i class="fa-solid fa-circle-pause"></i></div>
-      <div>
-        <div class="label">Not Working</div>
-        <div class="value" id="sumIdle">0</div>
-      </div>
-    </div>
-  </div>
 
-  <div class="roster-card" style="margin-bottom:24px;">
-    <div class="roster-card-head">
-      <h2><i class="fa-solid fa-map-location-dot"></i>Team Map</h2>
-      <span class="muted" id="locationsCount">0 locations</span>
-      <button class="btn btn-primary" id="addLocationBtn"><i class="fa-solid fa-plus"></i>Add Location</button>
-    </div>
-    <div style="padding:0 24px 24px;">
-      <div id="teamMap"></div>
-      <p class="modal-hint" id="mapPickHint" style="display:none;"><i class="fa-solid fa-hand-pointer"></i> Picking mode: click anywhere on the map to set the new location's coordinates.</p>
+    <div class="roster-card" style="margin-bottom:24px;">
+      <div class="roster-card-head">
+        <h2><i class="fa-solid fa-map-location-dot"></i>Team Map</h2>
+        <span class="muted" id="locationsCount">0 locations</span>
+        <button class="btn btn-primary" id="addLocationBtn"><i class="fa-solid fa-plus"></i>Add Location</button>
+      </div>
+      <div style="padding:0 24px 24px;">
+        <div id="teamMap"></div>
+        <p class="modal-hint" id="mapPickHint" style="display:none;"><i class="fa-solid fa-hand-pointer"></i> Picking
+          mode: click anywhere on the map to set the new location's coordinates.</p>
 
-      <div class="locations-panel">
-        <div class="panel-block">
-          <h3><i class="fa-solid fa-location-dot"></i>Work Locations</h3>
-          <div class="location-chip-list" id="locationChipList">
-            <p class="muted small-empty">No locations yet — add one above.</p>
+        <div class="locations-panel">
+          <div class="panel-block">
+            <h3><i class="fa-solid fa-location-dot"></i>Work Locations</h3>
+            <div class="location-chip-list" id="locationChipList">
+              <p class="muted small-empty">No locations yet — add one above.</p>
+            </div>
+          </div>
+
+          <div class="panel-block">
+            <h3><i class="fa-solid fa-street-view"></i>Find Nearest Employees</h3>
+            <select id="nearestLocationSelect">
+              <option value="">Select a location…</option>
+            </select>
+            <button class="btn btn-muted btn-block" id="findNearestBtn" style="margin-top:10px;"><i
+                class="fa-solid fa-magnifying-glass-location"></i>Find Nearest</button>
+            <div class="nearest-results" id="nearestResults"></div>
           </div>
         </div>
+      </div>
+    </div>
 
-        <div class="panel-block">
-          <h3><i class="fa-solid fa-street-view"></i>Find Nearest Employees</h3>
-          <select id="nearestLocationSelect">
-            <option value="">Select a location…</option>
-          </select>
-          <button class="btn btn-muted btn-block" id="findNearestBtn" style="margin-top:10px;"><i class="fa-solid fa-magnifying-glass-location"></i>Find Nearest</button>
-          <div class="nearest-results" id="nearestResults"></div>
+    <div class="roster-card">
+      <div class="roster-card-head">
+        <h2><i class="fa-solid fa-list-check"></i>Employee Shift Status</h2>
+      </div>
+      <div class="roster-table-wrap">
+        <table class="roster-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Surname</th>
+              <th>Status</th>
+              <th>Started At</th>
+              <th>Today</th>
+              <th>Location</th>
+              <th>Assignment</th>
+            </tr>
+          </thead>
+          <tbody id="rosterBody">
+            <tr>
+              <td colspan="7" class="roster-empty"><i class="fa-solid fa-spinner fa-spin"></i> Loading team…</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="roster-card" style="margin-top:24px;">
+      <div class="roster-card-head">
+        <h2><i class="fa-solid fa-clipboard-check"></i>Completed Assignments</h2>
+        <span class="muted" id="completionsCount">0 logged</span>
+        <button class="btn btn-muted" id="refreshCompletionsBtn"><i
+            class="fa-solid fa-arrows-rotate"></i>Refresh</button>
+      </div>
+      <div class="completions-list" id="completionsList">
+        <p class="muted small-empty" style="padding:0 24px 24px;"><i class="fa-solid fa-spinner fa-spin"></i> Loading
+          completions…</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Add / Edit Location modal -->
+  <div class="modal-overlay hidden" id="locationModalOverlay">
+    <div class="modal-box">
+      <h3><i class="fa-solid fa-location-dot"></i>Add Work Location</h3>
+      <div class="modal-field">
+        <label for="locNameInput">Location name</label>
+        <input type="text" id="locNameInput" placeholder="e.g. Glen View Branch">
+      </div>
+      <div class="modal-field">
+        <label for="locAddressInput">Address (optional)</label>
+        <input type="text" id="locAddressInput" placeholder="e.g. Gumbe Road, Glen View">
+      </div>
+      <div class="field-row" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="modal-field">
+          <label for="locLatInput">Latitude</label>
+          <input type="number" step="any" id="locLatInput" placeholder="-17.909396">
+        </div>
+        <div class="modal-field">
+          <label for="locLngInput">Longitude</label>
+          <input type="number" step="any" id="locLngInput" placeholder="30.960334">
         </div>
       </div>
-    </div>
-  </div>
-
-  <div class="roster-card">
-    <div class="roster-card-head">
-      <h2><i class="fa-solid fa-list-check"></i>Employee Shift Status</h2>
-    </div>
-    <div class="roster-table-wrap">
-      <table class="roster-table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Surname</th>
-            <th>Status</th>
-            <th>Started At</th>
-            <th>Today</th>
-            <th>Location</th>
-            <th>Assigned To</th>
-          </tr>
-        </thead>
-        <tbody id="rosterBody">
-          <tr><td colspan="7" class="roster-empty"><i class="fa-solid fa-spinner fa-spin"></i> Loading team…</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</main>
-
-<!-- Add / Edit Location modal -->
-<div class="modal-overlay hidden" id="locationModalOverlay">
-  <div class="modal-box">
-    <h3><i class="fa-solid fa-location-dot"></i>Add Work Location</h3>
-    <div class="modal-field">
-      <label for="locNameInput">Location name</label>
-      <input type="text" id="locNameInput" placeholder="e.g. Glen View Branch">
-    </div>
-    <div class="modal-field">
-      <label for="locAddressInput">Address (optional)</label>
-      <input type="text" id="locAddressInput" placeholder="e.g. Gumbe Road, Glen View">
-    </div>
-    <div class="field-row" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-      <div class="modal-field">
-        <label for="locLatInput">Latitude</label>
-        <input type="number" step="any" id="locLatInput" placeholder="-17.909396">
-      </div>
-      <div class="modal-field">
-        <label for="locLngInput">Longitude</label>
-        <input type="number" step="any" id="locLngInput" placeholder="30.960334">
+      <button class="btn btn-outline btn-block" id="locUseCurrentBtn" style="margin-bottom:14px;"><i
+          class="fa-solid fa-location-crosshairs"></i>Use My Current Location</button>
+      <p class="modal-hint"><i class="fa-solid fa-circle-info"></i> Or click anywhere on the team map to drop the pin
+        there.</p>
+      <div class="modal-actions">
+        <button class="btn btn-muted" id="locCancelBtn">Cancel</button>
+        <button class="btn btn-primary" id="locSaveBtn"><i class="fa-solid fa-check"></i>Save Location</button>
       </div>
     </div>
-    <button class="btn btn-outline btn-block" id="locUseCurrentBtn" style="margin-bottom:14px;"><i class="fa-solid fa-location-crosshairs"></i>Use My Current Location</button>
-    <p class="modal-hint"><i class="fa-solid fa-circle-info"></i> Or click anywhere on the team map to drop the pin there.</p>
-    <div class="modal-actions">
-      <button class="btn btn-muted" id="locCancelBtn">Cancel</button>
-      <button class="btn btn-primary" id="locSaveBtn"><i class="fa-solid fa-check"></i>Save Location</button>
-    </div>
   </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="js/supabase-client.js"></script>
-<script src="js/auth.js"></script>
-<script src="js/theme.js"></script>
-<script src="js/manager-dashboard.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/manager-dashboard.js"></script>
 </body>
+
 </html>

@@ -1,99 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard — ShiftTracker</title>
-<link rel="stylesheet" href="css/styles.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — ShiftTracker</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
+
 <body>
 
-<header class="topbar">
-  <a class="brand" href="dashboard.html" style="text-decoration:none;"><i class="fa-solid fa-business-time"></i>ShiftTracker</a>
-  <div class="topbar-right">
-    <div class="status-pill-wrap"><span>Status:</span>
-      <span class="pill" id="statusPill"><i class="fa-solid fa-circle" id="statusPillIcon"></i><span id="statusPillText">Not Working</span></span>
-    </div>
-    <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme"><i class="fa-solid fa-sun"></i></button>
-    <div class="user-menu" id="userMenu" onclick="toggleUserDropdown()">
-      <i class="fa-solid fa-circle-user"></i>
-      <span id="userLabel">User</span> <i class="fa-solid fa-chevron-down"></i>
-      <div class="user-dropdown" id="userDropdown">
-        <button onclick="signOut()"><i class="fa-solid fa-right-from-bracket"></i>Log out</button>
+  <header class="topbar">
+    <a class="brand" href="dashboard.html" style="text-decoration:none;"><i
+        class="fa-solid fa-business-time"></i>ShiftTracker</a>
+    <div class="topbar-right">
+      <div class="status-pill-wrap"><span>Status:</span>
+        <span class="pill" id="statusPill"><i class="fa-solid fa-circle" id="statusPillIcon"></i><span
+            id="statusPillText">Not Working</span></span>
+      </div>
+      <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme"><i class="fa-solid fa-sun"></i></button>
+      <div class="user-menu" id="userMenu" onclick="toggleUserDropdown()">
+        <i class="fa-solid fa-circle-user"></i>
+        <span id="userLabel">User</span> <i class="fa-solid fa-chevron-down"></i>
+        <div class="user-dropdown" id="userDropdown">
+          <button onclick="signOut()"><i class="fa-solid fa-right-from-bracket"></i>Log out</button>
+        </div>
       </div>
     </div>
-  </div>
-</header>
+  </header>
 
-<main class="dashboard">
-  <h1>Employee Dashboard</h1>
+  <main class="dashboard">
+    <h1>Employee Dashboard</h1>
 
-  <div class="grid-2">
-    <div class="card">
-      <h2><i class="fa-solid fa-bolt"></i>Shift Actions</h2>
-      <div class="actions-row" id="actionsRow">
-        <button class="btn btn-primary" id="startBtn"><i class="fa-solid fa-play"></i>Start Shift</button>
+    <div class="grid-2">
+      <div class="card">
+        <h2><i class="fa-solid fa-bolt"></i>Shift Actions</h2>
+        <div class="actions-row" id="actionsRow">
+          <button class="btn btn-primary" id="startBtn"><i class="fa-solid fa-play"></i>Start Shift</button>
+        </div>
       </div>
-    </div>
 
-    <div class="card">
-      <h2><i class="fa-solid fa-stopwatch"></i>Shift Timer</h2>
-      <div class="metric-box">
-        <div class="label">Working Time</div>
-        <div class="value" id="workingTime">0h 0m 0s</div>
-      </div>
-      <div class="metric-box">
-        <div class="label">Break Time</div>
-        <div class="value amber" id="breakTime">0h 0m 0s</div>
-      </div>
-      <div class="metric-box" id="startedAtBox" style="display:none;">
-        <div class="label">Started At</div>
-        <div class="value small" id="startedAt">--:--:--</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="grid-2">
-    <div class="card">
-      <h2><i class="fa-solid fa-list-check"></i>Shift Status</h2>
-      <div class="status-banner not_working" id="statusBanner">
-        <i class="fa-solid fa-circle-pause" id="statusBannerIcon"></i> <span id="statusBannerText">Not Working</span>
-      </div>
-      <div class="stat-row">
+      <div class="card">
+        <h2><i class="fa-solid fa-stopwatch"></i>Shift Timer</h2>
         <div class="metric-box">
-          <div class="label">Today</div>
-          <div class="value small" id="statToday">0.00h</div>
+          <div class="label">Working Time</div>
+          <div class="value" id="workingTime">0h 0m 0s</div>
         </div>
         <div class="metric-box">
-          <div class="label">This Week</div>
-          <div class="value small" id="statWeek">0.00h</div>
+          <div class="label">Break Time</div>
+          <div class="value amber" id="breakTime">0h 0m 0s</div>
         </div>
-        <div class="metric-box">
-          <div class="label">This Month</div>
-          <div class="value small" id="statMonth">0.00h</div>
+        <div class="metric-box" id="startedAtBox" style="display:none;">
+          <div class="label">Started At</div>
+          <div class="value small" id="startedAt">--:--:--</div>
         </div>
       </div>
     </div>
 
-    <div class="card">
-      <h2><i class="fa-solid fa-location-dot"></i>Location</h2>
-      <div id="map"></div>
-      <div class="coords-row">
-        <span>Latitude: <b id="latVal">—</b></span>
-        <span>Longitude: <b id="lngVal">—</b></span>
+    <div class="grid-2">
+      <div class="card">
+        <h2><i class="fa-solid fa-list-check"></i>Shift Status</h2>
+
+        <div class="assignment-accept-card" id="assignmentAcceptCard" style="display:none;">
+          <div class="aa-icon"><i class="fa-solid fa-envelope-circle-check"></i></div>
+          <div class="aa-info">
+            <div class="label">New Assignment Offer</div>
+            <div class="aa-location" id="aaLocationName"><i class="fa-solid fa-location-dot"></i><span></span></div>
+            <div class="aa-desc" id="aaLocationDesc">A manager has assigned you to this location. Accept it to add it
+              to your dashboard.</div>
+          </div>
+          <div class="aa-actions">
+            <button class="btn btn-danger btn-sm" id="declineAssignmentBtn"><i
+                class="fa-solid fa-xmark"></i>Decline</button>
+            <button class="btn btn-primary btn-sm" id="acceptAssignmentBtn"><i
+                class="fa-solid fa-check"></i>Accept</button>
+          </div>
+        </div>
+
+        <div class="assignment-accepted-card" id="assignmentAcceptedCard" style="display:none;">
+          <div class="assignment-info">
+            <div class="label">Current Assignment</div>
+            <div class="assignment-name" id="currentAssignmentName"><i class="fa-solid fa-location-dot"></i>
+              <span>—</span>
+            </div>
+            <span class="pill accepted-pill"><i class="fa-solid fa-check"></i>Accepted</span>
+          </div>
+          <div class="assignment-log">
+            <div class="label">My Completions</div>
+            <div id="myCompletionsList" class="assignment-log-list">
+              <p class="muted small-empty">No completions logged yet.</p>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-block" id="completeAssignmentBtn" style="display:none; margin-top: 12px;"><i
+            class="fa-solid fa-check-double"></i>Complete Assignment</button>
+        <div id="completionSuccess" style="display:none;" class="completion-success">
+          <i class="fa-solid fa-circle-check"></i> Assignment marked as complete!
+        </div>
+
+        <div class="status-banner not_working" id="statusBanner">
+          <i class="fa-solid fa-circle-pause" id="statusBannerIcon"></i> <span id="statusBannerText">Not Working</span>
+        </div>
+        <div class="stat-row">
+          <div class="metric-box">
+            <div class="label">Today</div>
+            <div class="value small" id="statToday">0.00h</div>
+          </div>
+          <div class="metric-box">
+            <div class="label">This Week</div>
+            <div class="value small" id="statWeek">0.00h</div>
+          </div>
+          <div class="metric-box">
+            <div class="label">This Month</div>
+            <div class="value small" id="statMonth">0.00h</div>
+          </div>
+        </div>
       </div>
-      <button class="btn btn-muted btn-block" id="updateLocationBtn"><i class="fa-solid fa-location-crosshairs"></i>Update Location</button>
+
+      <div class="card">
+        <h2><i class="fa-solid fa-location-dot"></i>Location</h2>
+        <div class="metric-box" id="assignedBox">
+          <div class="label">Assigned Work Location</div>
+          <div class="value small" id="assignedLocName">— Unassigned —</div>
+        </div>
+        <div id="map"></div>
+        <div class="coords-row">
+          <span>Latitude: <b id="latVal">—</b></span>
+          <span>Longitude: <b id="lngVal">—</b></span>
+        </div>
+        <button class="btn btn-muted btn-block" id="updateLocationBtn"><i
+            class="fa-solid fa-location-crosshairs"></i>Update Location</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Complete Assignment modal -->
+  <div class="modal-overlay hidden" id="completionModalOverlay">
+    <div class="modal-box">
+      <h3><i class="fa-solid fa-check-double"></i>Complete Assignment</h3>
+      <div class="modal-field">
+        <label for="completionLocationName">Location</label>
+        <input type="text" id="completionLocationName" readonly>
+      </div>
+      <div class="modal-field">
+        <label for="completionNotes">Notes (optional)</label>
+        <textarea id="completionNotes" rows="3"
+          placeholder="e.g. Shift completed, handed over to next shift"></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-muted" id="completionCancelBtn">Cancel</button>
+        <button class="btn btn-primary" id="completionConfirmBtn"><i class="fa-solid fa-check"></i>Log
+          Completion</button>
+      </div>
     </div>
   </div>
-</main>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="js/supabase-client.js"></script>
-<script src="js/auth.js"></script>
-<script src="js/theme.js"></script>
-<script src="js/dashboard.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/dashboard.js"></script>
 </body>
+
 </html>
