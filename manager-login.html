@@ -1,99 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Manager Login — ShiftTracker</title>
-<link rel="stylesheet" href="css/styles.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Manager Login — ShiftTracker</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
+
 <body>
 
-<header class="topbar">
-  <a class="brand" href="index.html" style="text-decoration:none;"><i class="fa-solid fa-business-time"></i>ShiftTracker</a>
-  <div class="topbar-links">
-    <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme"><i class="fa-solid fa-sun"></i></button>
-    <a class="btn btn-muted" href="login.html"><i class="fa-solid fa-user"></i>Employee Login</a>
-  </div>
-</header>
+  <header class="topbar">
+    <a class="brand" href="index.html" style="text-decoration:none;"><img src="company logo.png" alt="Logo"
+        class="brand-logo"></a>
+    <div class="topbar-links">
+      <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme"><i class="fa-solid fa-sun"></i></button>
+      <a class="btn btn-muted" href="login.html"><i class="fa-solid fa-user"></i>Employee Login</a>
+    </div>
+  </header>
 
-<div class="auth-wrap">
-  <div class="auth-card">
-    <h1><i class="fa-solid fa-user-tie" style="color:var(--blue); margin-right:10px;"></i>Manager Login</h1>
-    <p class="subtitle">Sign in to view your team's shifts and status.</p>
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <h1><i class="fa-solid fa-user-tie" style="color:var(--blue); margin-right:10px;"></i>Manager Login</h1>
+      <p class="subtitle">Sign in to view your team's shifts and status.</p>
 
-    <div id="formMsg" class="form-msg"></div>
+      <div id="formMsg" class="form-msg"></div>
 
-    <form id="loginForm">
-      <div class="field">
-        <label for="email">Email</label>
-        <div class="input-wrap">
-          <i class="fa-solid fa-envelope"></i>
-          <input type="email" id="email" required autocomplete="email" placeholder="you@example.com">
+      <form id="loginForm">
+        <div class="field">
+          <label for="email">Email</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" id="email" required autocomplete="email" placeholder="you@example.com">
+          </div>
         </div>
-      </div>
-      <div class="field">
-        <label for="password">Password</label>
-        <div class="input-wrap">
-          <i class="fa-solid fa-lock"></i>
-          <input type="password" id="password" required autocomplete="current-password" placeholder="••••••••">
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="password" required autocomplete="current-password" placeholder="••••••••">
+          </div>
         </div>
-      </div>
-      <button type="submit" class="btn btn-primary btn-block" id="submitBtn"><i class="fa-solid fa-right-to-bracket"></i>Sign In as Manager</button>
-    </form>
+        <button type="submit" class="btn btn-primary btn-block" id="submitBtn"><i
+            class="fa-solid fa-right-to-bracket"></i>Sign In as Manager</button>
+      </form>
 
-    <div class="auth-foot">
-      Not a manager? <a href="login.html">Employee login</a><br>
-      Don't have an account? <a href="register.html">Register</a>
+      <div class="auth-foot">
+        Not a manager? <a href="login.html">Employee login</a><br>
+        Don't have an account? <a href="register.html">Register</a>
+      </div>
     </div>
   </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/supabase-client.js"></script>
-<script src="js/auth.js"></script>
-<script src="js/theme.js"></script>
-<script>
-  redirectIfAuthed();
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/theme.js"></script>
+  <script>
+    redirectIfAuthed();
 
-  const form = document.getElementById("loginForm");
-  const msg = document.getElementById("formMsg");
-  const submitBtn = document.getElementById("submitBtn");
+    const form = document.getElementById("loginForm");
+    const msg = document.getElementById("formMsg");
+    const submitBtn = document.getElementById("submitBtn");
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    msg.className = "form-msg";
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>Signing in...';
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      msg.className = "form-msg";
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>Signing in...';
 
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
 
-    const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+      const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
 
-    if (error) {
-      msg.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i><span>${error.message}</span>`;
-      msg.className = "form-msg error";
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i>Sign In as Manager';
-      return;
-    }
+      if (error) {
+        msg.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i><span>${error.message}</span>`;
+        msg.className = "form-msg error";
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i>Sign In as Manager';
+        return;
+      }
 
-    const { data: { session } } = await supabaseClient.auth.getSession();
-    const profile = await getProfile(session.user.id);
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      const profile = await getProfile(session.user.id);
 
-    if (!profile || profile.role !== "manager") {
-      // This account isn't a manager — don't leave them signed in on the wrong page.
-      await supabaseClient.auth.signOut();
-      msg.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i><span>This account isn\'t registered as a manager. Use Employee Login instead.</span>';
-      msg.className = "form-msg error";
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i>Sign In as Manager';
-      return;
-    }
+      if (!profile || profile.role !== "manager") {
+        // This account isn't a manager — don't leave them signed in on the wrong page.
+        await supabaseClient.auth.signOut();
+        msg.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i><span>This account isn\'t registered as a manager. Use Employee Login instead.</span>';
+        msg.className = "form-msg error";
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i>Sign In as Manager';
+        return;
+      }
 
-    window.location.href = "manager-dashboard.html";
-  });
-</script>
+      await touchLogin();
+      window.location.href = "manager-dashboard.html";
+    });
+  </script>
 </body>
+
 </html>

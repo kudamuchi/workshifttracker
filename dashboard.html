@@ -3,8 +3,9 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Dashboard — ShiftTracker</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -13,8 +14,8 @@
 <body>
 
   <header class="topbar">
-    <a class="brand" href="dashboard.html" style="text-decoration:none;"><i
-        class="fa-solid fa-business-time"></i>ShiftTracker</a>
+    <a class="brand" href="dashboard.html" style="text-decoration:none;"><img src="company logo.png" alt="Logo"
+        class="brand-logo"></a>
     <div class="topbar-right">
       <div class="status-pill-wrap"><span>Status:</span>
         <span class="pill" id="statusPill"><i class="fa-solid fa-circle" id="statusPillIcon"></i><span
@@ -92,6 +93,20 @@
             <div id="myCompletionsList" class="assignment-log-list">
               <p class="muted small-empty">No completions logged yet.</p>
             </div>
+          </div>
+        </div>
+
+        <div class="self-assign-card" id="selfAssignCard">
+          <div class="sa-title"><i class="fa-solid fa-user-plus"></i>Assign Myself to a Job</div>
+          <p class="muted sa-desc">Pick an available work location to assign yourself. It will appear on the manager
+            dashboard just like a manager-assigned job.</p>
+          <select id="selfAssignLocationSelect">
+            <option value="">Select a location…</option>
+          </select>
+          <button class="btn btn-primary btn-block" id="selfAssignBtn" style="margin-top:10px;"><i
+              class="fa-solid fa-check"></i>Assign Me</button>
+          <div id="selfAssignSuccess" class="completion-success" style="display:none;">
+            <i class="fa-solid fa-circle-check"></i> You've been assigned!
           </div>
         </div>
 

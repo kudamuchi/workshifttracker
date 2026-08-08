@@ -3,8 +3,9 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Manager Dashboard — ShiftTracker</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -13,10 +14,9 @@
 <body>
 
   <header class="topbar">
-    <a class="brand" href="manager-dashboard.html" style="text-decoration:none;"><i
-        class="fa-solid fa-business-time"></i>ShiftTracker</a>
+    <a class="brand" href="manager-dashboard.html" style="text-decoration:none;"><img src="company logo.png" alt="Logo"
+        class="brand-logo"></a>
     <div class="topbar-right">
-      <a class="btn btn-outline" href="dashboard.html"><i class="fa-solid fa-user-clock"></i>My Shifts</a>
       <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme"><i class="fa-solid fa-sun"></i></button>
       <div class="user-menu" id="userMenu" onclick="toggleUserDropdown()">
         <i class="fa-solid fa-circle-user"></i>
@@ -66,6 +66,20 @@
           <div class="value" id="sumIdle">0</div>
         </div>
       </div>
+      <div class="summary-card logged_in">
+        <div class="summary-icon"><i class="fa-solid fa-arrow-right-to-bracket"></i></div>
+        <div>
+          <div class="label">Logged In</div>
+          <div class="value" id="sumLoggedIn">0</div>
+        </div>
+      </div>
+      <div class="summary-card logged_out">
+        <div class="summary-icon"><i class="fa-solid fa-arrow-right-from-bracket"></i></div>
+        <div>
+          <div class="label">Logged Out</div>
+          <div class="value" id="sumLoggedOut">0</div>
+        </div>
+      </div>
     </div>
 
     <div class="roster-card" style="margin-bottom:24px;">
@@ -110,7 +124,8 @@
             <tr>
               <th>Name</th>
               <th>Surname</th>
-              <th>Status</th>
+              <th>Login Status</th>
+              <th>Shift Status</th>
               <th>Started At</th>
               <th>Today</th>
               <th>Location</th>
@@ -119,7 +134,7 @@
           </thead>
           <tbody id="rosterBody">
             <tr>
-              <td colspan="7" class="roster-empty"><i class="fa-solid fa-spinner fa-spin"></i> Loading team…</td>
+              <td colspan="8" class="roster-empty"><i class="fa-solid fa-spinner fa-spin"></i> Loading team…</td>
             </tr>
           </tbody>
         </table>
@@ -152,7 +167,7 @@
         <label for="locAddressInput">Address (optional)</label>
         <input type="text" id="locAddressInput" placeholder="e.g. Gumbe Road, Glen View">
       </div>
-      <div class="field-row" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div class="field-row" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;" data-responsive-fields>
         <div class="modal-field">
           <label for="locLatInput">Latitude</label>
           <input type="number" step="any" id="locLatInput" placeholder="-17.909396">
